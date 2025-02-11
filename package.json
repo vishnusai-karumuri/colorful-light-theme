@@ -2,7 +2,7 @@
     "name": "colorful-light-theme",
     "displayName": "Better Light Theme",
     "description": "A modern, highly customizable light theme with easy color customization",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "publisher": "Monarch",
     "author": {
         "name": "Vishnu Sai Karumuri"
@@ -13,7 +13,7 @@
     },
     "icon": "icon.png",
     "galleryBanner": {
-        "color": "#27ae60",
+        "color": "#218c4d",
         "theme": "light"
     },
     "keywords": [

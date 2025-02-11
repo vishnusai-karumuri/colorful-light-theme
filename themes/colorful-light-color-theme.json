@@ -8,9 +8,9 @@
         "activityBar.foreground": "#2d2b55",
         "sideBar.background": "#f3f3f3",
         "sideBar.foreground": "#2d2b55",
-        "titleBar.activeBackground": "#27ae60",
+        "titleBar.activeBackground": "#218c4d",
         "titleBar.activeForeground": "#ffffff",
-        "statusBar.background": "#27ae60",
+        "statusBar.background": "#218c4d",
         "statusBar.foreground": "#ffffff",
         "tab.activeBackground": "#ffffff",
         "tab.activeForeground": "#2d2b55",
@@ -87,7 +87,7 @@
                 "entity.other.inherited-class"
             ],
             "settings": {
-                "foreground": "#27ae60"
+                "foreground": "#218c4d"
             }
         },
         {
