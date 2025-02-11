@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const currentColor = getColorValue(colorToUpdate);
+        const currentColor = getColorValue(colorToUpdate, context.extensionPath);
         const newColor = await vscode.window.showInputBox({
             prompt: `Enter new color for ${colorToUpdate} (hex format, e.g., #ffffff)`,
             value: currentColor,
@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
 
         if (newColor) {
-            await updateThemeColor(colorToUpdate, newColor);
+            await updateThemeColor(colorToUpdate, newColor, context.extensionPath);
         }
     });
 
@@ -74,8 +74,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(updateColorsCommand, configChangeDisposable);
 }
 
-function getColorValue(setting: string): string {
-    const themePath = path.join(__dirname, '../themes/colorful-light-color-theme.json');
+function getColorValue(setting: string, extensionPath: string): string {
+    const themePath = path.join(extensionPath, 'themes', 'colorful-light-color-theme.json');
     const themeContent = JSON.parse(fs.readFileSync(themePath, 'utf8'));
 
     if (setting.startsWith('syntax.')) {
@@ -85,9 +85,11 @@ function getColorValue(setting: string): string {
         );
         return token ? token.settings.foreground : '#000000';
     } else {
-        const key = setting.replace('background', 'Background')
-                         .replace('foreground', 'Foreground')
-                         .replace('titleBar.', 'titleBar.active');
+        let key = setting;
+        if (setting.includes('titleBar')) {
+            key = setting.replace('background', 'activeBackground')
+                       .replace('foreground', 'activeForeground');
+        }
         return themeContent.colors[key] || '#000000';
     }
 }
@@ -149,8 +151,8 @@ function updateThemeFromSettings() {
     }
 }
 
-async function updateThemeColor(setting: string, color: string) {
-    const themePath = path.join(__dirname, '../themes/colorful-light-color-theme.json');
+async function updateThemeColor(setting: string, color: string, extensionPath: string) {
+    const themePath = path.join(extensionPath, 'themes', 'colorful-light-color-theme.json');
     
     try {
         const themeContent = JSON.parse(fs.readFileSync(themePath, 'utf8'));
@@ -164,27 +166,24 @@ async function updateThemeColor(setting: string, color: string) {
                 token.settings.foreground = color;
             }
         } else {
-            const key = setting.replace('background', 'Background')
-                             .replace('foreground', 'Foreground')
-                             .replace('titleBar.', 'titleBar.active');
+            let key = setting;
+            if (setting.includes('titleBar')) {
+                key = setting.replace('background', 'activeBackground')
+                           .replace('foreground', 'activeForeground');
+            }
             themeContent.colors[key] = color;
         }
 
         // Write the updated theme back to disk
         fs.writeFileSync(themePath, JSON.stringify(themeContent, null, 4));
         
-        // Update the corresponding setting
-        const settingPath = `betterLightTheme.colors.${setting}`;
-        try {
-            await vscode.workspace.getConfiguration().update(settingPath, color, vscode.ConfigurationTarget.Global);
-            vscode.window.showInformationMessage(`Updated ${setting} to ${color}`);
-        } catch (error) {
-            // If updating the setting fails, still show the theme changes
-            vscode.window.showInformationMessage(`Updated ${setting} to ${color}`);
-        }
+        // Show success message and reload window
+        vscode.window.showInformationMessage(`Updated ${setting} to ${color}. Reloading window...`);
         
-        // Reload window to apply changes
-        vscode.commands.executeCommand('workbench.action.reloadWindow');
+        // Force reload the window after a short delay to ensure the file is written
+        setTimeout(() => {
+            vscode.commands.executeCommand('workbench.action.reloadWindow');
+        }, 500);
     } catch (error) {
         vscode.window.showErrorMessage('Failed to update theme color: ' + error);
         console.error(error);
