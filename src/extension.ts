@@ -64,14 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    // Watch for configuration changes
-    let configChangeDisposable = vscode.workspace.onDidChangeConfiguration(event => {
-        if (event.affectsConfiguration('betterLightTheme.colors')) {
-            updateThemeFromSettings();
-        }
-    });
-
-    context.subscriptions.push(updateColorsCommand, configChangeDisposable);
+    context.subscriptions.push(updateColorsCommand);
 }
 
 function getColorValue(setting: string, extensionPath: string): string {
@@ -91,63 +84,6 @@ function getColorValue(setting: string, extensionPath: string): string {
                        .replace('foreground', 'activeForeground');
         }
         return themeContent.colors[key] || '#000000';
-    }
-}
-
-function updateThemeFromSettings() {
-    const config = vscode.workspace.getConfiguration('betterLightTheme.colors');
-    const themePath = path.join(__dirname, '../themes/colorful-light-color-theme.json');
-    
-    try {
-        const themeContent = JSON.parse(fs.readFileSync(themePath, 'utf8'));
-        let hasChanges = false;
-
-        // Update UI colors
-        const uiElements = ['editor', 'activityBar', 'sideBar', 'titleBar', 'statusBar'];
-        for (const element of uiElements) {
-            const background = config.get(`${element}.background`);
-            const foreground = config.get(`${element}.foreground`);
-            
-            if (background) {
-                const key = `${element}.background`.replace('titleBar.', 'titleBar.active');
-                if (themeContent.colors[key] !== background) {
-                    themeContent.colors[key] = background;
-                    hasChanges = true;
-                }
-            }
-            
-            if (foreground) {
-                const key = `${element}.foreground`.replace('titleBar.', 'titleBar.active');
-                if (themeContent.colors[key] !== foreground) {
-                    themeContent.colors[key] = foreground;
-                    hasChanges = true;
-                }
-            }
-        }
-
-        // Update syntax colors
-        const syntaxElements = ['comments', 'strings', 'keywords', 'functions', 'variables', 'constants', 'classes', 'punctuation'];
-        for (const element of syntaxElements) {
-            const color = config.get(`syntax.${element}`);
-            if (color) {
-                const token = themeContent.tokenColors.find((t: any) => 
-                    t.name.toLowerCase() === element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
-                );
-                if (token && token.settings.foreground !== color) {
-                    token.settings.foreground = color;
-                    hasChanges = true;
-                }
-            }
-        }
-
-        if (hasChanges) {
-            fs.writeFileSync(themePath, JSON.stringify(themeContent, null, 4));
-            vscode.window.showInformationMessage('Theme colors updated');
-            vscode.commands.executeCommand('workbench.action.reloadWindow');
-        }
-    } catch (error) {
-        vscode.window.showErrorMessage('Failed to update theme colors: ' + error);
-        console.error(error);
     }
 }
 

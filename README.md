@@ -33,25 +33,17 @@ A modern, highly customizable light theme for Visual Studio Code that lets you p
 
 ## Color Customization
 
-You can customize any color in the theme using two methods:
+You can customize any color in the theme using the built-in color update command:
 
-### Method 1: Using the Command Palette
 1. Open the Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
 2. Type "Better Light Theme: Update Colors"
-3. Select the element you want to customize
+3. Select the element you want to customize from the list
 4. Enter the new color in hex format (e.g., #ffffff)
-5. The theme will update automatically
+5. The window will automatically reload to apply your changes
 
-### Method 2: Using Settings
-1. Open VS Code Settings (Ctrl+, / Cmd+,)
-2. Search for "Better Light Theme"
-3. Find the color you want to change
-4. Use the color picker or enter a hex value
-5. The theme will update automatically
+### What You Can Customize
 
-## Customizable Elements
-
-### UI Elements
+#### UI Elements
 - Editor
   - Background color
   - Text color
@@ -68,7 +60,7 @@ You can customize any color in the theme using two methods:
   - Background color
   - Text color
 
-### Syntax Colors
+#### Syntax Colors
 - Comments
 - Strings
 - Keywords
@@ -78,9 +70,9 @@ You can customize any color in the theme using two methods:
 - Classes
 - Punctuation
 
-## Color Format
+### Color Format
 
-Colors should be specified in hex format:
+Colors must be specified in hex format:
 - Start with # symbol
 - Followed by 6 characters (0-9 or a-f)
 - Examples: 
@@ -89,6 +81,7 @@ Colors should be specified in hex format:
   - `#ff0000` (red)
   - `#00ff00` (green)
   - `#0000ff` (blue)
+  - `#27ae60` (theme green)
 
 ## Tips
 
@@ -96,4 +89,13 @@ Colors should be specified in hex format:
 - Match UI element colors for a cohesive look (like the green title and status bars)
 - Consider using your company or project colors for a personalized theme
 - Test your color choices with different file types to ensure good visibility
-- If you make a mistake, you can always reset to the default colors in settings
+- After each color change, VS Code will automatically reload to apply the changes
+
+## Troubleshooting
+
+If colors are not updating:
+1. Make sure you're entering valid hex color codes (e.g., #ffffff)
+2. Wait for the window to reload after making changes
+3. If changes still don't appear, try:
+   - Selecting a different theme and then selecting "Better Light Theme" again
+   - Running the "Developer: Reload Window" command from the Command Palette
