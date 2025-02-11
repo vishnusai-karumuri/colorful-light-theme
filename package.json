@@ -1,10 +1,28 @@
 {
     "name": "colorful-light-theme",
     "displayName": "Better Light Theme",
-    "description": "A simple but colorful light theme for VS Code",
-    "version": "0.0.1",
-    "publisher": "user",
+    "description": "A modern, highly customizable light theme with easy color customization",
+    "version": "1.0.0",
+    "publisher": "Monarch",
+    "author": {
+        "name": "Vishnu Sai Karumuri"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/colorful-light-theme"
+    },
     "icon": "icon.png",
+    "galleryBanner": {
+        "color": "#27ae60",
+        "theme": "light"
+    },
+    "keywords": [
+        "theme",
+        "light theme",
+        "customizable",
+        "color",
+        "colorful"
+    ],
     "engines": {
         "vscode": "^1.60.0"
     },
@@ -41,6 +59,7 @@
         "@types/vscode": "^1.60.0",
         "typescript": "^4.x.x"
     },
+    "license": "MIT",
     "dependencies": {
         "colorful-light-theme": "file:"
     }
